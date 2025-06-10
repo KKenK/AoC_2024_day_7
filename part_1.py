@@ -35,15 +35,23 @@ class Equation():
     def print_equation_parts(self):
         print(f"Target: {self.target}; Numbers: {self.numbers}")
 
-def operator_combination_calculator(numbers_count):
+def operator_combination_generator(numbers_count, operators):
 
-    if numbers_count == 1 :
-        return [""]
+    operator_combination_strings = operators
 
-    operator_combinations_strings = [combination + recursive_combination_string for recursive_combination_string in operator_combination_calculator(numbers_count - 1)
-                    for combination in ["+", "*"]]
+    for i in range(numbers_count - 2):
+        
+        loop_operator_combinations = []
 
-    return operator_combinations_strings
+        for operator_combination_string in operator_combination_strings:
+
+            for operator in operators:
+
+               loop_operator_combinations.append(operator_combination_string + operator)
+
+        operator_combination_strings = loop_operator_combinations
+    
+    return operator_combination_strings
 
 
 parsed_input = input_parser.InputParser(r"C:\Users\kylek\Documents\code\Advent_of_code\2024\Day_7\input.txt").parsed_input
@@ -53,7 +61,7 @@ equations = [Equation(line) for line in parsed_input]
 total_calibration_result = 0
 
 for equation in equations:
-    equation_operator_combinations = operator_combination_calculator(len(equation.numbers))
+    equation_operator_combinations = operator_combination_generator(len(equation.numbers), ("+", "*"))
 
     for operator_combination in equation_operator_combinations:
 
